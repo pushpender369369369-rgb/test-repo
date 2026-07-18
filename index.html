@@ -1,0 +1,424 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #main-container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #container {
+            background-color: rgb(232, 184, 97);
+            width: 600px;
+            height: 700px;
+            border: 10px solid rgb(137, 103, 40);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #game-box-body {
+
+            width: 500px;
+            height: 500px;
+            background-color: cornsilk;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+
+        }
+
+        .num-box {
+            width: 100px;
+            height: 100px;
+            background-color: rgb(232, 184, 97);
+            border-radius: 10px;
+        }
+
+        .num-line {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+        }
+
+        #buttons-body {
+            width: 500px;
+            height: 200px;
+            margin-top: 20px;
+            background-color: cornsilk;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+        }
+
+        #buttons {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .button {
+            width: 100px;
+            height: 100px;
+            background-color: orange;
+            border-radius: 10px;
+        }
+
+        .cell {
+            background-color: rgb(229, 217, 165);
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+            border: 3px solid rgb(137, 103, 40);
+            color: rgb(137, 103, 40);
+        }
+
+        .btn {
+            width: 140px;
+            height: 50px;
+            background-color: rgb(137, 103, 40);
+            color: cornsilk;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+            border: 3px solid cornsilk;
+        }
+
+        .cell1 {
+            background-color: rgb(232, 184, 97);
+            border: 0px;
+        }
+
+        
+    </style>
+</head>
+
+<body style="background-color: black;">
+    <div id="main-container">
+
+        <div id="container">
+
+            <div style="text-align: center;">
+                <h1>WELCOME TO 2048 GAME</h1>
+            </div>
+
+            <div style="display: flex;justify-content: center;gap:100px;margin-bottom:30px;">
+                <div class="btn" id="new-game">NEW GAME</div>
+                <div class="btn" id="score">SCORE</div>
+            </div>
+
+
+            <div id="game-box-body">
+
+                <div class="num-line">
+                    <div id="box1" class="num-box"></div>
+                    <div id="box2" class="num-box"></div>
+                    <div id="box3" class="num-box"></div>
+                    <div id="box4" class="num-box"></div>
+                </div>
+
+                <div class="num-line">
+                    <div id="box5" class="num-box"></div>
+                    <div id="box6" class="num-box"></div>
+                    <div id="box7" class="num-box"></div>
+                    <div id="box8" class="num-box"></div>
+                </div>
+
+                <div class="num-line">
+                    <div id="box9" class="num-box"></div>
+                    <div id="box10" class="num-box"></div>
+                    <div id="box11" class="num-box"></div>
+                    <div id="box12" class="num-box"></div>
+                </div>
+
+                <div class="num-line">
+                    <div id="box13" class="num-box"></div>
+                    <div id="box14" class="num-box"></div>
+                    <div id="box15" class="num-box"></div>
+                    <div id="box16" class="num-box"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+        let num00 = document.getElementById("box1");
+        let num01 = document.getElementById("box2");
+        let num02 = document.getElementById("box3");
+        let num03 = document.getElementById("box4");
+        let num10 = document.getElementById("box5");
+        let num11 = document.getElementById("box6");
+        let num12 = document.getElementById("box7");
+        let num13 = document.getElementById("box8");
+        let num20 = document.getElementById("box9");
+        let num21 = document.getElementById("box10");
+        let num22 = document.getElementById("box11");
+        let num23 = document.getElementById("box12");
+        let num30 = document.getElementById("box13");
+        let num31 = document.getElementById("box14");
+        let num32 = document.getElementById("box15");
+        let num33 = document.getElementById("box16");
+        let score = document.getElementById("score");
+        score.textContent = "0";
+        let newGame = document.getElementById("new-game");
+        newGame.addEventListener("click", function () {
+            disable1();
+            newStart();
+        })
+
+        let matrix = [
+            [num00, num01, num02, num03],
+            [num10, num11, num12, num13],
+            [num20, num21, num22, num23],
+            [num30, num31, num32, num33]
+        ];
+
+        function disable1() {
+            for (let i = 0; i < matrix.length; i++) {
+                for (let j = 0; j < matrix[0].length; j++) {
+                    matrix[i][j].innerText = "";
+                    matrix[i][j].classList.remove("cell");   // FIX 2: remove "cell" too
+                    matrix[i][j].classList.add("cell1");
+                }
+            }
+        }
+        let scr=0;
+        function newStart() {
+            let max = 3, min = 0;
+            let i1, j1, i2, j2;
+
+            i1 = Math.floor(Math.random() * (max - min + 1)) + min;
+            j1 = Math.floor(Math.random() * (max - min + 1)) + min;
+
+            // FIX 1: keep re-rolling until second position differs from first
+            do {
+                i2 = Math.floor(Math.random() * (max - min + 1)) + min;
+                j2 = Math.floor(Math.random() * (max - min + 1)) + min;
+            } while (i1 === i2 && j1 === j2);
+
+            matrix[i1][j1].innerText = 2;
+            matrix[i2][j2].innerText = 2;
+
+            matrix[i1][j1].classList.remove("cell1");   // FIX 2: clean slate before adding
+            matrix[i2][j2].classList.remove("cell1");
+            matrix[i1][j1].classList.add("cell");
+            matrix[i2][j2].classList.add("cell");
+            score.textContent = "0";
+            scr=0;
+        }
+
+        
+        function moveLeft() {
+            for (let i = 0; i < 4; i++) {
+                let values = [];
+                for (let j = 0; j < 4; j++) {
+                    let val = matrix[i][j].textContent.trim();
+                    if (val !== "") values.push(Number(val));
+                }
+
+                for (let k = 0; k < values.length - 1; k++) {
+                    if (values[k] === values[k + 1]) {
+                        scr = scr + (values[k] + values[k + 1]);
+                        score.textContent = scr;
+                        score.classList.add("score-popup");
+                        values[k] *= 2;
+                        values.splice(k + 1, 1);
+                    }
+                }
+
+                for (let j = 0; j < 4; j++) {
+                    let cell = matrix[i][j];
+                    if (j < values.length) {
+                        cell.textContent = values[j];
+                        cell.classList.remove("cell1");
+                        cell.classList.add("cell");
+                    } else {
+                        cell.textContent = "";
+                        cell.classList.remove("cell");
+                        cell.classList.add("cell1");
+                    }
+                }
+            }
+
+            spawnTile();
+
+        }
+        function moveRight() {
+            for (let i = 0; i < 4; i++) {
+                // Step 1: extract all non-empty values from this row
+                let values = [];
+                for (let j = 0; j < 4; j++) {
+                    let val = matrix[i][j].textContent.trim();
+                    if (val !== "") values.push(Number(val));
+                }
+
+                // Step 2: merge adjacent equal values (right to left)
+                for (let k = values.length - 1; k > 0; k--) {
+                    if (values[k] === values[k - 1]) {
+                        scr = scr + (values[k] + values[k - 1]);
+                        score.textContent = scr;
+                        score.classList.add("score-popup");
+                        values[k] *= 2;
+                        values.splice(k - 1, 1);
+                    }
+                }
+
+                // Step 3: write values back (right-aligned), fill rest with empty
+                let offset = 4 - values.length;
+                for (let j = 0; j < 4; j++) {
+                    let cell = matrix[i][j];
+                    if (j < offset) {
+                        cell.textContent = "";
+                        cell.classList.remove("cell");
+                        cell.classList.add("cell1");
+                    } else {
+                        cell.textContent = values[j - offset];
+                        cell.classList.remove("cell1");
+                        cell.classList.add("cell");
+                    }
+                }
+            }
+
+            spawnTile();
+        }
+
+        function moveUp() {
+            for (let j = 0; j < 4; j++) {
+                // Step 1: extract all non-empty values from this column
+                let values = [];
+                for (let i = 0; i < 4; i++) {
+                    let val = matrix[i][j].textContent.trim();
+                    if (val !== "") values.push(Number(val));
+                }
+
+                // Step 2: merge adjacent equal values (top to bottom)
+                for (let k = 0; k < values.length - 1; k++) {
+                    if (values[k] === values[k + 1]) {
+                        scr = scr + (values[k] + values[k + 1]);
+                        score.textContent = scr;
+                        score.classList.add("score-popup");
+                        values[k] *= 2;
+                        values.splice(k + 1, 1);
+                    }
+                }
+
+                // Step 3: write values back (top-aligned), fill rest with empty
+                for (let i = 0; i < 4; i++) {
+                    let cell = matrix[i][j];
+                    if (i < values.length) {
+                        cell.textContent = values[i];
+                        cell.classList.remove("cell1");
+                        cell.classList.add("cell");
+                    } else {
+                        cell.textContent = "";
+                        cell.classList.remove("cell");
+                        cell.classList.add("cell1");
+                    }
+                }
+            }
+
+            spawnTile();
+        }
+
+        function moveDown() {
+            for (let j = 0; j < 4; j++) {
+                // Step 1: extract all non-empty values from this column
+                let values = [];
+                for (let i = 0; i < 4; i++) {
+                    let val = matrix[i][j].textContent.trim();
+                    if (val !== "") values.push(Number(val));
+                }
+
+                // Step 2: merge adjacent equal values (bottom to top)
+                for (let k = values.length - 1; k > 0; k--) {
+                    if (values[k] === values[k - 1]) {
+                        scr = scr + (values[k] + values[k - 1]);
+                        score.textContent = scr;
+                        score.classList.add("score-popup");
+                        values[k] *= 2;
+                        values.splice(k - 1, 1);
+                    }
+                }
+
+                // Step 3: write values back (bottom-aligned), fill rest with empty
+                let offset = 4 - values.length;
+                for (let i = 0; i < 4; i++) {
+                    let cell = matrix[i][j];
+                    if (i < offset) {
+                        cell.textContent = "";
+                        cell.classList.remove("cell");
+                        cell.classList.add("cell1");
+                    } else {
+                        cell.textContent = values[i - offset];
+                        cell.classList.remove("cell1");
+                        cell.classList.add("cell");
+                    }
+                }
+            }
+
+            spawnTile();
+        }
+        function spawnTile() {
+            let empty = [];
+            for (let i = 0; i < 4; i++)
+                for (let j = 0; j < 4; j++)
+                    if (matrix[i][j].textContent.trim() === "") empty.push([i, j]);
+
+
+            if (empty.length === 0) return;
+
+            let [i, j] = empty[Math.floor(Math.random() * empty.length)];
+            matrix[i][j].textContent = 2;
+            matrix[i][j].classList.remove("cell1");
+            matrix[i][j].classList.add("cell");
+        }
+
+
+
+
+
+        document.addEventListener("keydown", function (e) {
+            if (e.key == "ArrowLeft") {
+                moveLeft();
+            }
+            else if (e.key == "ArrowRight") {
+                moveRight();
+            }
+            else if (e.key == "ArrowDown") {
+                moveDown();
+            }
+            else if (e.key == "ArrowUp") {
+                moveUp();
+            }
+        });
+
+    </script>
+
+
+
+</body>
+
+</html>
