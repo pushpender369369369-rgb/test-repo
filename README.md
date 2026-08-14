@@ -1,2 +1,2 @@
 # test-repo
-this is netflix landing page in html and css
+this is 2048 game in html, css and javascript
